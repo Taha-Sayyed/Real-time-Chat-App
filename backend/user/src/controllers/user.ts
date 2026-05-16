@@ -27,7 +27,7 @@ export const loginUser = TryCatch(async (req, res) => {
     });
 
     await redisClient.set(rateLimitKey, "true", {
-        EX: 60,
+        EX: 60, //1 min
     });
 
     const message = {
