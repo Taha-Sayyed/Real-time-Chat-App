@@ -1,11 +1,11 @@
-import { publishToQueue } from "../config/rabbitmq.js"
 import TryCatch from "../config/TryCatch.js"
-import { redisClient } from "../index.js";
+import { redisClient } from "../config/redis.js";
 import { User } from "../model/User.js";
 import { generateToken } from "../config/generateToken.js"
 import { AuthenticatedRequest } from "../middleware/isAuth.js"
+import { LoginUserDependencies } from "../interfaces/interface_types.js"
 
-export const loginUser = TryCatch(async (req, res) => {
+export const loginUser = ({ redisClient, publishToQueue }: LoginUserDependencies) => TryCatch(async (req, res) => {
     const { email } = req.body
 
     const rateLimitKey = `otp:ratelimit:${email}`;

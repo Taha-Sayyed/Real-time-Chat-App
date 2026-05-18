@@ -10,10 +10,12 @@ import {
 } from "../controllers/user.js"
 
 import { isAuth } from "../middleware/isAuth.js";
+import { redisClient } from "../config/redis.js";
+import { publishToQueue } from "../config/rabbitmq.js";
 
 const router = express.Router();
 
-router.post("/login", loginUser);
+router.post("/login", loginUser({ redisClient, publishToQueue }));
 router.post("/verify", verifyUser);
 router.get("/me", isAuth, myProfile);
 router.get("/user/all", isAuth, getAllUsers);
