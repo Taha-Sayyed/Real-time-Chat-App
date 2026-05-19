@@ -12,6 +12,8 @@ import {
 import { isAuth } from "../middleware/isAuth.js";
 import { redisClient } from "../config/redis.js";
 import { publishToQueue } from "../config/rabbitmq.js";
+import { User } from '../model/User.js'
+import { generateToken } from "../config/generateToken.js"
 
 const router = express.Router();
 
@@ -20,5 +22,5 @@ router.post("/verify", verifyUser({ redisClient }));
 router.get("/me", isAuth, myProfile);
 router.get("/user/all", isAuth, getAllUsers);
 router.get("/user/:id", getAUser);
-router.post("/update/user", isAuth, updateName);
+router.post("/update/user", isAuth, updateName({ UserModel: User, generateToken }));
 export default router

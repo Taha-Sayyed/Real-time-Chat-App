@@ -1,3 +1,6 @@
+import { User } from "../model/User.js"
+import { generateToken } from "../config/generateToken.js"
+
 export interface RedisClient {
     get(key: string): Promise<string | null>;
 
@@ -25,3 +28,8 @@ export interface LoginUserDependencies {
 export interface VerifyUserDependencies {
     redisClient: RedisClient;
 }
+
+export type UpdateNameDeps = {
+    UserModel: typeof User;
+    generateToken: typeof generateToken;
+};
