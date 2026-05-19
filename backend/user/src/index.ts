@@ -2,10 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
 import dns from "node:dns/promises";
-import { createClient } from "redis";
 import { connectRabbitMQ } from "./config/rabbitmq.js";
 import cors from "cors";
 import userRoutes from "./routes/user.js";
+import {redisClient} from "./config/redis.js"
 
 //👇For Development only
 dns.setServers(["1.1.1.1"]);
@@ -14,11 +14,6 @@ dns.setServers(["1.1.1.1"]);
 dotenv.config();
 connectDb();
 connectRabbitMQ();
-
-export const redisClient = createClient({
-  url: process.env.REDIS_URL,
-});
-
 redisClient
   .connect()
   .then(() => console.log("✅connected to redis"))
