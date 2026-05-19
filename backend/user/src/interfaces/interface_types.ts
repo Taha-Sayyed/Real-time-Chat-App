@@ -8,6 +8,8 @@ export interface RedisClient {
             EX: number;
         }
     ): Promise<any>;
+
+    del(key: string): Promise<any>;
 }
 
 export type PublishToQueue = (
@@ -18,4 +20,8 @@ export type PublishToQueue = (
 export interface LoginUserDependencies {
     redisClient: RedisClient;
     publishToQueue: PublishToQueue;
+}
+
+export interface VerifyUserDependencies {
+    redisClient: RedisClient;
 }

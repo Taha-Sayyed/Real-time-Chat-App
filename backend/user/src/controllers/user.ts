@@ -1,9 +1,8 @@
 import TryCatch from "../config/TryCatch.js"
-import { redisClient } from "../config/redis.js";
 import { User } from "../model/User.js";
 import { generateToken } from "../config/generateToken.js"
 import { AuthenticatedRequest } from "../middleware/isAuth.js"
-import { LoginUserDependencies } from "../interfaces/interface_types.js"
+import { LoginUserDependencies, VerifyUserDependencies } from "../interfaces/interface_types.js"
 
 export const loginUser = ({ redisClient, publishToQueue }: LoginUserDependencies) => TryCatch(async (req, res) => {
     const { email } = req.body
@@ -43,7 +42,7 @@ export const loginUser = ({ redisClient, publishToQueue }: LoginUserDependencies
     });
 });
 
-export const verifyUser = TryCatch(async (req, res) => {
+export const verifyUser = ({ redisClient }: VerifyUserDependencies) => TryCatch(async (req, res) => {
     const { email, otp: enteredOtp } = req.body;
 
     if (!email || !enteredOtp) {

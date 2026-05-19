@@ -16,7 +16,7 @@ import { publishToQueue } from "../config/rabbitmq.js";
 const router = express.Router();
 
 router.post("/login", loginUser({ redisClient, publishToQueue }));
-router.post("/verify", verifyUser);
+router.post("/verify", verifyUser({ redisClient }));
 router.get("/me", isAuth, myProfile);
 router.get("/user/all", isAuth, getAllUsers);
 router.get("/user/:id", getAUser);
