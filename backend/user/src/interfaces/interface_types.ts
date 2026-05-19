@@ -27,6 +27,8 @@ export interface LoginUserDependencies {
 
 export interface VerifyUserDependencies {
     redisClient: RedisClient;
+    generateToken: typeof generateToken;
+    UserModel: typeof User;
 }
 
 export type UpdateNameDeps = {

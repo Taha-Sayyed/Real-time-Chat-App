@@ -18,7 +18,7 @@ import { generateToken } from "../config/generateToken.js"
 const router = express.Router();
 
 router.post("/login", loginUser({ redisClient, publishToQueue }));
-router.post("/verify", verifyUser({ redisClient }));
+router.post("/verify", verifyUser({ redisClient, generateToken, UserModel: User }));
 router.get("/me", isAuth, myProfile);
 router.get("/user/all", isAuth, getAllUsers);
 router.get("/user/:id", getAUser);
