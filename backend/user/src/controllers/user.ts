@@ -1,6 +1,6 @@
 import TryCatch from "../config/TryCatch.js"
 import { AuthenticatedRequest } from "../middleware/isAuth.js"
-import { LoginUserDependencies, VerifyUserDependencies, UpdateNameDeps } from "../interfaces/interface_types.js"
+import { LoginUserDependencies, VerifyUserDependencies, UpdateNameDeps, getUserDeps } from "../interfaces/interface_types.js"
 
 export const loginUser = ({ redisClient, publishToQueue }: LoginUserDependencies) => TryCatch(async (req, res) => {
     const { email } = req.body
@@ -40,7 +40,7 @@ export const loginUser = ({ redisClient, publishToQueue }: LoginUserDependencies
     });
 });
 
-export const verifyUser = ({ redisClient,generateToken,UserModel }: VerifyUserDependencies) => TryCatch(async (req, res) => {
+export const verifyUser = ({ redisClient, generateToken, UserModel }: VerifyUserDependencies) => TryCatch(async (req, res) => {
     const { email, otp: enteredOtp } = req.body;
 
     if (!email || !enteredOtp) {
@@ -106,13 +106,13 @@ export const updateName = ({ UserModel, generateToken }: UpdateNameDeps) => TryC
     });
 });
 
-export const getAllUsers = TryCatch(async (req: AuthenticatedRequest, res) => {
-    const users = await User.find();
+export const getAllUsers = ({ UserModel }:getUserDeps) => TryCatch(async (req: AuthenticatedRequest, res) => {
+    const users = await UserModel.find();
 
     res.json(users);
 });
 
-export const getAUser = TryCatch(async (req, res) => {
-    const user = await User.findById(req.params.id);
+export const getAUser = ({UserModel}:getUserDeps)=>TryCatch(async (req, res) => {
+    const user = await UserModel.findById(req.params.id);
     res.json(user);
 });

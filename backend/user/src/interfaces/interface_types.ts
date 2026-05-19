@@ -35,3 +35,7 @@ export type UpdateNameDeps = {
     UserModel: typeof User;
     generateToken: typeof generateToken;
 };
+
+export type getUserDeps = {
+    UserModel: typeof User;
+}
