@@ -65,7 +65,7 @@ export const verifyUser = ({ redisClient, generateToken, UserModel }: VerifyUser
     let user = await UserModel.findOne({ email });
 
     if (!user) {
-        const name = email.slice(0, 8);
+        const name = email.slice(0, 7);
         user = await UserModel.create({ name, email });
     }
 
