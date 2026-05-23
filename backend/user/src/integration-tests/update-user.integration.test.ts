@@ -1,6 +1,7 @@
 import request from "supertest";
 import express from "express";
 import jwt from "jsonwebtoken";
+import { generateKeyPairSync } from "crypto";
 import { describe, it, expect, jest, beforeEach, afterEach, afterAll, beforeAll } from "@jest/globals";
 
 
@@ -22,10 +23,20 @@ const { User } = await import("../model/User.js");
 
 describe("POST /api/v1/update/user", () => {
     let app: express.Express;
-    const JWT_SECRET = "test-secret-key-for-jwt";
+    let testPrivateKey: string;
+    let testPublicKey: string;
 
     beforeAll(() => {
-        process.env.JWT_SECRET = JWT_SECRET;
+        const { privateKey, publicKey } = generateKeyPairSync("rsa", {
+            modulusLength: 2048,
+            publicKeyEncoding: { type: "spki", format: "pem" },
+            privateKeyEncoding: { type: "pkcs8", format: "pem" },
+        });
+        testPrivateKey = privateKey;
+        testPublicKey = publicKey;
+
+        process.env.JWT_PRIVATE_KEY_BASE64 = Buffer.from(privateKey).toString("base64");
+        process.env.JWT_PUBLIC_KEY_BASE64 = Buffer.from(publicKey).toString("base64");
     });
 
     beforeEach(() => {
@@ -37,7 +48,10 @@ describe("POST /api/v1/update/user", () => {
 
     // ── Helper: Generate valid token ──
     function generateValidToken(user: any): string {
-        return jwt.sign({ user }, JWT_SECRET, { expiresIn: "15d" });
+        return jwt.sign({ user }, testPrivateKey, {
+            algorithm: "RS256",
+            expiresIn: "15d",
+        });
     }
 
     // ── Edge 1: Happy Path — Valid token, user found, name updated ──
