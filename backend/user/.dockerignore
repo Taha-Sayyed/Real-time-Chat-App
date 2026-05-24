@@ -1,0 +1,21 @@
+# Dependencies & build artifacts
+node_modules
+dist
+coverage
+*.log
+
+# Secrets & environment
+.env
+.env.*
+
+# Source control & IDE
+.git
+.gitignore
+.vscode
+.idea
+
+# Test & docs
+*.test.ts
+*.spec.ts
+jest.config.ts
+README.md

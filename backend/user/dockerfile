@@ -1,0 +1,64 @@
+# syntax=docker/dockerfile:1
+
+# ------------------------------
+# Build argument for Node version
+# ------------------------------
+ARG NODE_VERSION=25
+
+# ==============================
+# Stage 1: Production Dependencies
+# ==============================
+FROM node:${NODE_VERSION}-alpine AS deps-prod
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci --omit=dev && \
+    npm cache clean --force
+
+# ==============================
+# Stage 2: Build
+# ==============================
+FROM node:${NODE_VERSION}-alpine AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci && \
+    npm cache clean --force
+
+COPY . .
+
+RUN npm run build
+
+# ==============================
+# Stage 3: Runtime
+# ==============================
+FROM node:${NODE_VERSION}-alpine AS runtime
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=5000
+
+# Create non-root user and group
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001 -G nodejs
+
+# Copy only the artifacts required to run the service
+COPY --from=deps-prod --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --from=build --chown=nodejs:nodejs /app/dist ./dist
+
+# Apply restrictive read-only permissions
+RUN chmod -R 555 /app/dist /app/node_modules
+
+USER nodejs
+
+EXPOSE 5000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD node --eval "require('http').get('http://127.0.0.1:5000/api/health', (r) => process.exit(r.statusCode === 200 ? 0 : 1))"
+
+CMD ["node", "dist/index.js"]
