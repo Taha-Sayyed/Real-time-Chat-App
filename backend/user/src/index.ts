@@ -5,7 +5,7 @@ import dns from "node:dns/promises";
 import { connectRabbitMQ } from "./config/rabbitmq.js";
 import cors from "cors";
 import userRoutes from "./routes/user.js";
-import {redisClient} from "./config/redis.js"
+import { redisClient } from "./config/redis.js"
 
 //👇For Development only
 dns.setServers(["1.1.1.1"]);
@@ -22,6 +22,12 @@ redisClient
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    message: "Service is Healthy ✅"
+  });
+});
 
 app.use("/api/v1", userRoutes);
 
