@@ -25,6 +25,7 @@ services:
     build:
       context: ./backend/user
       dockerfile: Dockerfile
+    image: user-service:latest
     container_name: chat-app-user-service
     restart: unless-stopped
     ports:
