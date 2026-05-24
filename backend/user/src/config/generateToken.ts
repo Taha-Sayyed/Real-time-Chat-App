@@ -1,10 +1,26 @@
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
+import { createPrivateKey } from "crypto";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+const privateKeyPem = Buffer.from(
+  process.env.JWT_PRIVATE_KEY_BASE64 as string,
+  "base64"
+).toString("utf-8");
+
+const privateKey = createPrivateKey({
+  key: privateKeyPem,
+  format: "pem",
+});
 
 export const generateToken = (user: any) => {
-  return jwt.sign({ user }, JWT_SECRET, { expiresIn: "15d" });
+  return jwt.sign(
+    { user },
+    privateKey,
+    {
+      algorithm: "RS256",
+      expiresIn: process.env.JWT_EXPIRES_IN ?? "15d",
+    } as SignOptions
+  );
 };

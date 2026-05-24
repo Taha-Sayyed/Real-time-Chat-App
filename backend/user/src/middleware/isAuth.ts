@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { IUser } from "../model/User.js";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt, { JwtPayload, VerifyOptions } from "jsonwebtoken";
+import { createPublicKey } from "crypto";
 
 
 export interface AuthenticatedRequest extends Request {
@@ -24,9 +25,22 @@ export const isAuth = async (
 
         const token = authHeader.split(" ")[1];
 
+        const publicKeyPem = Buffer.from(
+            process.env.JWT_PUBLIC_KEY_BASE64 as string,
+            "base64"
+        ).toString("utf-8");
+
+        const publicKey = createPublicKey({
+            key: publicKeyPem,
+            format: "pem",
+        });
+
         const decodedValue = jwt.verify(
             token,
-            process.env.JWT_SECRET as string
+            publicKey,
+            {
+                algorithms: ["RS256"],
+            } as VerifyOptions
         ) as JwtPayload
 
         if (!decodedValue || !decodedValue.user) {
