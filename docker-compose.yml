@@ -1,0 +1,50 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: chat-app-rabbitmq
+    hostname: rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"     # AMQP
+      - "15672:15672"   # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - chat-app-network
+
+  user-service:
+    build:
+      context: ./backend/user
+      dockerfile: Dockerfile
+    image: user-service:latest
+    container_name: chat-app-user-service
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/user/.env
+    environment:
+      - Rabbitmq_Host=rabbitmq
+      - NODE_ENV=production
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - chat-app-network
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  chat-app-network:
+    name: chat-app-network
+    driver: bridge
