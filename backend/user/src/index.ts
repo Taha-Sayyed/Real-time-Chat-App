@@ -1,15 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./config/db.js";
-import dns from "node:dns/promises";
+// import dns from "node:dns/promises";
 import { connectRabbitMQ } from "./config/rabbitmq.js";
 import cors from "cors";
 import userRoutes from "./routes/user.js";
 import { redisClient } from "./config/redis.js"
 
-//👇For Development only
-dns.setServers(["1.1.1.1"]);
-//👆For Development only
+// //👇For Development only
+// dns.setServers(["1.1.1.1"]);
+// //👆For Development only
 
 dotenv.config();
 connectDb();
