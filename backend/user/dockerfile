@@ -3,7 +3,7 @@
 # ------------------------------
 # Build argument for Node version
 # ------------------------------
-ARG NODE_VERSION=25
+ARG NODE_VERSION=22
 
 # ==============================
 # Stage 1: Production Dependencies
@@ -50,10 +50,10 @@ RUN addgroup -g 1001 -S nodejs && \
 # Copy only the artifacts required to run the service
 COPY --from=deps-prod --chown=nodejs:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=nodejs:nodejs /app/dist ./dist
+COPY --from=build --chown=nodejs:nodejs /app/package.json ./package.json
 
-# Apply restrictive read-only permissions
-RUN chmod -R 555 /app/dist /app/node_modules
-
+# Apply restrictive  permissions
+RUN chmod -R 555 /app/dist /app/node_modules && chmod 444 /app/package.json
 USER nodejs
 
 EXPOSE 5000
