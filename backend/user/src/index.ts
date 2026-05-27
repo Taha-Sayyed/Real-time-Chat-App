@@ -25,7 +25,13 @@ app.use(cors());
 
 app.get("/api/health", (req, res) => {
   res.status(200).json({
-    message: "Service is Healthy ✅"
+    message: "User Service is Healthy ✅"
+  });
+});
+
+app.get("/api/users/health", (req, res) => {
+  res.status(200).json({
+    message: "User Service is Healthy ✅"
   });
 });
 
