@@ -29,13 +29,13 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-app.get("/api/users/health", (req, res) => {
+app.get("/api/v1/users/health", (req, res) => {
   res.status(200).json({
     message: "User Service is Healthy ✅"
   });
 });
 
-app.use("/api/v1", userRoutes);
+app.use("/api/v1/users", userRoutes);
 
 
 const port = process.env.PORT;
