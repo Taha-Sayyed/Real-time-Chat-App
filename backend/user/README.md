@@ -4,6 +4,7 @@ A real-time chat application built as three independent backend services (User, 
 
 This is the **main microservice** responsible for user registration, login, JWT token generation (RS256), and profile management. It serves as the identity provider for the entire chat application.
 
+[▶ Watch Demo](./asset/Demo.mp4)
 ---
 
 ## Architecture Diagram
