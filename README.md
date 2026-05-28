@@ -2,14 +2,18 @@
 
 A real-time chat application built as three independent backend services (User, Chat, Mail) that communicate through a message broker, with a static frontend served from object storage. All backend services run as containers on serverless compute, discover each other through internal DNS, and sit behind a single load balancer that routes traffic by URL path. The deployment, scaling, and teardown of the entire infrastructure is handled through scripts rather than manual console configuration
 
+This project is primarily focused on **backend architecture**, microservices communication, cloud infrastructure, and authentication systems rather than frontend development.
+
 This is the **main microservice** responsible for user registration, login, JWT token generation (RS256), and profile management. It serves as the identity provider for the entire chat application.
 
-[▶ Watch Demo](./asset/Demo.mp4)
+## Demo Video
+
+[Link](https://drive.google.com/file/d/1nCEl55y578Um9x72JDJ2i7dlEfIhdeV2/view?usp=sharing)
 ---
 
 ## Architecture Diagram
 
-![AWS Infrastructure Diagram](./docs/aws-infrastructure-diagram.svg)
+![AWS Infrastructure Diagram](./backend/user/docs/aws-infrastructure-diagram.svg)
 
 The complete application consists of 3 microservices (User, Chat, Mail) + RabbitMQ, all containerized and deployed on AWS ECS Fargate behind an Application Load Balancer. The frontend is a Next.js static site hosted on S3.
 
