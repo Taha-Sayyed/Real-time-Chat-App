@@ -14,6 +14,7 @@ This is the **main microservice** responsible for user registration, login, JWT 
 ## Architecture Diagram
 
 ![AWS Infrastructure Diagram](./backend/user/docs/aws-infrastructure-diagram.svg)
+![Backend Architecture Diagram](./backend/user/docs/Backend-Architecture.svg)
 
 The complete application consists of 3 microservices (User, Chat, Mail) + RabbitMQ, all containerized and deployed on AWS ECS Fargate behind an Application Load Balancer. The frontend is a Next.js static site hosted on S3.
 
