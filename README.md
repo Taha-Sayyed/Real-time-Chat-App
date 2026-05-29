@@ -182,7 +182,7 @@ Before running the scripts, ensure the following are installed and configured:
 .\create.ps1
 ```
 3. After creation, update frontend API URLs to the ALB DNS
-4. Rebuild and upload frontend to S3 
+4. Rebuild and upload frontend /out to S3 
 
 ---
 # Related Repositories
