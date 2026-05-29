@@ -42,7 +42,8 @@ The complete application consists of 3 microservices (User, Chat, Mail) + Rabbit
 - **Token Verification** — Verify user identity via JWT
 - **Profile Management** — View and update user profile
 - **User Discovery** — List all users, get specific user by ID
-- **Session Caching** — Redis-backed session storage
+- **OTP Caching** — Redis-backed OTP storage
+- **OTP Rate Limiting** — Rate limiting on OTP for Login
 - **Event Publishing** — Publishes login events to RabbitMQ for Mail service
 - **Health Check** — `/api/v1/users/health` for ALB health checks
 
